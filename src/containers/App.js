@@ -1,7 +1,28 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as blockActions from '../actions/BlockActions'
 
-export default class App extends Component {
+import Estimation from '../components/Estimation'
+
+class App extends Component {
   render() {
-    return <div>Sup 2ch</div>
+    const { block } = this.props
+    const { getInput } = this.props.blockActions
+    return <Estimation block={ block } getInput={ getInput }/>
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    block: state.block
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    blockActions: bindActionCreators(blockActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
