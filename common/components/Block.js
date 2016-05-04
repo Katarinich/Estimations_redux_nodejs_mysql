@@ -21,7 +21,8 @@ export default class Block extends Component {
   render() {
     const { block } = this.props
     return <li className="block">
-      {block.isInput ? <input autoFocus type="text" onBlur={::this.renderInput}/> : <div className="text" onClick={::this.renderInput}>{block.text}</div>}
+      {block.isInput ? <input autoFocus type="text" defaultValue={block.text} onBlur={::this.renderInput}/> : 
+        <div className="text" onClick={::this.renderInput}>{block.text}</div>}
       {this.renderChilds()}
     </li>
   }

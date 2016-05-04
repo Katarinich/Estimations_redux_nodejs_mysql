@@ -1,4 +1,4 @@
-import { GET_INPUT } from '../constants/Block'
+import { GET_INPUT } from '../constants/actionTypes'
 
 const initialState = {
   text: 'Development Block',

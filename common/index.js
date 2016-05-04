@@ -1,16 +1,15 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import App from './containers/App'
+import EstimationApp from './containers/EstimationApp'
 import configureStore from './store/configureStore'
 
 const store = configureStore()
+const dispatch = store.dispatch
 
 render(
   <Provider store={store}>
-    <div className="app">
-      <App />
-    </div>
+    <EstimationApp dispatch={dispatch}/>
   </Provider>,
   document.getElementById('root')
 )

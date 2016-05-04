@@ -1,15 +1,11 @@
 var path = require('path')
 var webpack = require('webpack')
-var NpmInstallPlugin = require('npm-install-webpack-plugin')
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
 
-module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+var config = {
+  devtool: 'eval-cheap-module-source-map',
   entry: [
-    'webpack-hot-middleware/client',
-    'babel-polyfill',
-    './src/index'
+    'webpack-hot-middleware/client?path=/__webpack_hmr&reload=true',
+    './common/index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -17,36 +13,63 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
+    new webpack.IgnorePlugin(/vertx/), // Isomorphic fetch workaround
+    new webpack.IgnorePlugin(/iconv.*/), // Isomorphic fetch workaround
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new NpmInstallPlugin()
+    new webpack.NoErrorsPlugin()
   ],
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        loaders: ['eslint'],
-        include: [
-          path.resolve(__dirname, 'src')
-        ]
-      }
-    ],
     loaders: [
       {
-        loaders: ['react-hot', 'babel-loader'],
-        include: [
-          path.resolve(__dirname, 'src')
-        ],
-        test: /\.js$/,
-        plugins: ['transform-runtime']
+        test: /\.json$/,
+        loader: 'json',
+        exclude: /node_modules/
       },
       {
-        test:   /\.css$/,
-        loader: 'style-loader!css-loader!postcss-loader'
+        test: /\.js$/,
+        loader: 'babel',
+        include: [
+          path.join(__dirname, 'client'),
+          path.join(__dirname, 'common'),
+          path.join(__dirname, 'server')
+        ],
+        query: {
+          cacheDirectory: true
+        },
+        plugins: [
+          ['transform-react-display-name'],
+          ['react-transform', {
+            transforms: [
+              {
+                transform: 'react-transform-hmr',
+                imports: ['react'],
+                locals: ['module']
+              },
+              {
+                transform: 'react-transform-catch-errors',
+                imports: ['react', 'redbox-react']
+              }
+            ]
+          }]
+        ]
+      },
+      {
+        test: /\.js$/,
+        loader: 'eslint',
+        include: [
+          path.join(__dirname, 'client'),
+          path.join(__dirname, 'common'),
+          path.join(__dirname, 'server')
+        ]
       }
     ]
   },
-  postcss: function () {
-    return [autoprefixer, precss];
+  // build breaks on eslint without this workaround
+  // https://github.com/MoOx/eslint-loader/issues/23
+  eslint: {
+    emitWarning: true
   }
 }
+
+module.exports = config;
