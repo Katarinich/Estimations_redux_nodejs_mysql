@@ -5,11 +5,10 @@ import EstimationApp from './containers/EstimationApp'
 import configureStore from './store/configureStore'
 
 const store = configureStore()
-const dispatch = store.dispatch
 
 render(
   <Provider store={store}>
-    <EstimationApp dispatch={dispatch}/>
+    <EstimationApp />
   </Provider>,
   document.getElementById('root')
 )

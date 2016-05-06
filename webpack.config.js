@@ -2,7 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 var config = {
-  devtool: 'eval-cheap-module-source-map',
+  devtool: 'cheap-source-map',
   entry: [
     'webpack-hot-middleware/client?path=/__webpack_hmr&reload=true',
     './common/index'

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as estimationActions from '../actions/EstimationActions'
+import EstimationList from './EstimationList'
 
 class EstimationApp extends Component {
 
@@ -12,15 +13,18 @@ class EstimationApp extends Component {
       dateUpdated: new Date(),
       totalSum: 0,
       totalHours: 0
-    })
+    }, this.props.estimations.estimations)
   }
 
   render() {
     return (
-      <button
-        onClick={ () => this.handleClick() }>
-        { 'Create' }
-      </button>
+      <div class="container">
+         <button
+           onClick={ () => this.handleClick() }>
+           { 'Create' }
+         </button>
+        <EstimationList />
+      </div>
     )
   }
 }

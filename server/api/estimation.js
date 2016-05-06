@@ -25,3 +25,24 @@ export function createEstimation(estimation, callback) {
     })
   })
 }
+
+export function getEstimations(callback) {
+  var query = 'SELECT * FROM estimation'
+
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      done()
+      callback(err)
+    }
+
+    client.query(query, function(err, result) {
+      if(err) {
+        done()
+        callback(err)
+      }
+
+      done()
+      callback(err, result.rows)
+    })
+  })
+}

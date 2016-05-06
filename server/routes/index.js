@@ -11,5 +11,7 @@ export default (app) => {
   router.route('/api/estimation')
   .post(estimation.createEstimation)
 
+  router.get('/api/estimations', estimation.getEstimations)
+
   app.use(router)
 }
