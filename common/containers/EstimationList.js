@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
+
 import * as estimationActions from '../actions/EstimationActions'
 
 class EstimationList extends Component {
@@ -14,7 +16,8 @@ class EstimationList extends Component {
     if(this.props.isFetching) return <span> {'Loading'} </span>
 
     var estimations = this.props.estimations.map(function(estimation) {
-      return <li>{estimation.name}</li>
+      var estimationLink = '/estimation/' + estimation.id
+      return <li><Link to={estimationLink}>{estimation.name}</Link></li>
     })
 
     return <ul>{estimations}</ul>

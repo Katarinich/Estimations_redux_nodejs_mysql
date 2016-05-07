@@ -20,14 +20,12 @@ export default function estimations(state = initialState, action) {
       }
 
     case types.CREATE_ESTIMATION_SUCCESS:
+    case types.GET_ESTIMATIONS_FAILURE:
+    case types.CREATE_ESTIMATION_FAILURE:
+    default:
       return {
         estimations: action.payload,
         isFetching: false
       }
-
-    case types.GET_ESTIMATIONS_FAILURE:
-    case types.CREATE_ESTIMATION_FAILURE:
-    default:
-      return state
   }
 }

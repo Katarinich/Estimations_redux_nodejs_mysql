@@ -8,18 +8,20 @@ function createEstimationRequest(estimations) {
   }
 }
 
-function createEstimationSuccess(estimations) {
+function createEstimationSuccess(estimation, estimations) {
+  estimations.push(estimation)
   return {
     type: types.CREATE_ESTIMATION_SUCCESS,
     payload: estimations
   }
 }
 
-function createEstimationFailure(err, status) {
+function createEstimationFailure(err, status, estimations) {
   return {
     type: types.CREATE_ESTIMATION_FAILURE,
     err,
-    status
+    status,
+    payload: estimations
   }
 }
 
@@ -28,10 +30,10 @@ export function createEstimation(estimation, estimations) {
     dispatch(createEstimationRequest(estimations))
     return request('post', { ...estimation }, '/api/estimation')
     .then( () => {
-      dispatch(createEstimationSuccess(estimations))
+      dispatch(createEstimationSuccess(estimation, estimations))
     })
     .catch(err => {
-      dispatch(createEstimationFailure(err, err.status))
+      dispatch(createEstimationFailure(err, err.status, estimations))
     })
   }
 }
