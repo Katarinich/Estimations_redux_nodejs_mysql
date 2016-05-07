@@ -1,5 +1,6 @@
 import * as types from '../constants/actionTypes'
 import request from './util/request'
+import {createBlocks} from './BlockActions'
 
 function createEstimationRequest(estimations) {
   return {
@@ -9,7 +10,6 @@ function createEstimationRequest(estimations) {
 }
 
 function createEstimationSuccess(estimation, estimations) {
-  estimations.push(estimation)
   return {
     type: types.CREATE_ESTIMATION_SUCCESS,
     payload: estimations
@@ -29,7 +29,9 @@ export function createEstimation(estimation, estimations) {
   return (dispatch) => {
     dispatch(createEstimationRequest(estimations))
     return request('post', { ...estimation }, '/api/estimation')
-    .then( () => {
+    .then( (insertedEstimation) => {
+      estimations.push(estimation)
+      dispatch(createBlocks(insertedEstimation, estimations))
       dispatch(createEstimationSuccess(estimation, estimations))
     })
     .catch(err => {
