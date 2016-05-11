@@ -8,12 +8,12 @@ export function getInput(isInput) {
   }
 }
 
-export function createBlocks(insertedEstimation, estimations) {
+export function createBlocks(insertedEstimation) {
   return (dispatch) => {
     dispatch(createBlocksRequest())
     return request('post', { ...insertedEstimation }, '/api/blocks')
     .then( () => {
-      dispatch(createBlocksSuccess(estimations))
+      dispatch(createBlocksSuccess())
     })
     .catch(err => {
       dispatch(createBlocksFailure(err, err.status))
@@ -27,10 +27,9 @@ function createBlocksRequest() {
   }
 }
 
-function createBlocksSuccess(estimations){
+function createBlocksSuccess(){
   return {
-    type: types.CREATE_BLOCKS_SUCCESS,
-    payload: estimations
+    type: types.CREATE_BLOCKS_SUCCESS
   }
 }
 

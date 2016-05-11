@@ -9,10 +9,9 @@ function createEstimationRequest(estimations) {
   }
 }
 
-function createEstimationSuccess(estimation, estimations) {
+export function createEstimationSuccess() {
   return {
-    type: types.CREATE_ESTIMATION_SUCCESS,
-    payload: estimations
+    type: types.CREATE_ESTIMATION_SUCCESS
   }
 }
 
@@ -30,9 +29,8 @@ export function createEstimation(estimation, estimations) {
     dispatch(createEstimationRequest(estimations))
     return request('post', { ...estimation }, '/api/estimation')
     .then( (insertedEstimation) => {
-      estimations.push(estimation)
       dispatch(createBlocks(insertedEstimation, estimations))
-      dispatch(createEstimationSuccess(estimation, estimations))
+      dispatch(createEstimationSuccess())
     })
     .catch(err => {
       dispatch(createEstimationFailure(err, err.status, estimations))

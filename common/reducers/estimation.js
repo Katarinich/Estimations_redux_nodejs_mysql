@@ -10,6 +10,7 @@ export default function estimations(state = initialState, action) {
     case types.GET_ESTIMATIONS_REQUEST:
     case types.CREATE_ESTIMATION_REQUEST:
       return {
+        estimations: action.payload,
         isFetching: true
       }
 
@@ -23,9 +24,6 @@ export default function estimations(state = initialState, action) {
     case types.GET_ESTIMATIONS_FAILURE:
     case types.CREATE_ESTIMATION_FAILURE:
     default:
-      return {
-        estimations: action.payload,
-        isFetching: false
-      }
+      return state
   }
 }

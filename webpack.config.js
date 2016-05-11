@@ -5,7 +5,7 @@ var config = {
   devtool: 'cheap-source-map',
   entry: [
     'webpack-hot-middleware/client?path=/__webpack_hmr&reload=true',
-    './common/index'
+    './client/index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),

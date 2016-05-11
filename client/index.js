@@ -3,8 +3,9 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { Router, browserHistory } from 'react-router'
 
-import configureStore from './store/configureStore'
-import { routes } from './routes'
+import configureStore from '../common/store/configureStore'
+import { routes } from '../common/routes'
+import startSocketListener from './socketListener'
 
 const store = configureStore()
 
@@ -14,3 +15,5 @@ render(
   </Provider>,
   document.getElementById('root')
 )
+
+startSocketListener(store.dispatch)

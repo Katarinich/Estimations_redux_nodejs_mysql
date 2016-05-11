@@ -21,7 +21,7 @@ export function createEstimation(estimation, callback) {
       }
 
       done()
-      callback(err, result.rows[0])
+      callback(err, Object.assign(estimation, {id: result.rows[0].id}))
     })
   })
 }
