@@ -4,13 +4,13 @@ const initialState = {
   isFetching: false
 }
 
-export default function estimations(state = initialState, action) {
+export default function estimation(state = initialState, action) {
   console.log(action)
   switch (action.type) {
     case types.GET_ESTIMATIONS_REQUEST:
     case types.CREATE_ESTIMATION_REQUEST:
       return {
-        estimations: action.payload,
+        ...state,
         isFetching: true
       }
 

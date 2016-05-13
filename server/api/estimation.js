@@ -29,19 +29,17 @@ export function createEstimation(estimation, callback) {
 export function getEstimations(callback) {
   var query = 'SELECT * FROM estimation'
 
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(conString, function(err, client) {
     if(err) {
-      done()
       callback(err)
     }
 
     client.query(query, function(err, result) {
       if(err) {
-        done()
+        console.error(err)
         callback(err)
       }
 
-      done()
       callback(err, result.rows)
     })
   })

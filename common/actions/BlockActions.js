@@ -38,3 +38,37 @@ function createBlocksFailure() {
     type: types.CREATE_BLOCKS_FAILURE
   }
 }
+
+function getBlocksRequest() {
+  return {
+    type: types.GET_BLOCKS_REQUEST
+  }
+}
+
+function getBlocksSuccess(res) {
+  return {
+    type: types.GET_BLOCKS_SUCCESS,
+    payload: res
+  }
+}
+
+function getBlocksFailure(err, status) {
+  return {
+    type: types.GET_BLOCKS_FAILURE,
+    err,
+    status
+  }
+}
+
+export function getBlocks(estimation) {
+  return (dispatch) => {
+    dispatch(getBlocksRequest())
+    return request('get', {}, '/api/blocks/' + estimation.id)
+    .then(res => {
+      dispatch(getBlocksSuccess(res))
+    })
+    .catch(err => {
+      dispatch(getBlocksFailure(err, err.status))
+    })
+  }
+}

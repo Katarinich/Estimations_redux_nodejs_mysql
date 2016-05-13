@@ -13,7 +13,7 @@ class EstimationList extends Component {
 
   render() {
     console.log(this.props)
-    if(this.props.isFetching) return <span> {'Loading'} </span>
+    if(this.props.isFetching && !this.props.estimations) return <span> {'Loading'} </span>
 
     var estimations = this.props.estimations.map(function(estimation) {
       var estimationLink = '/estimation/' + estimation.id
@@ -27,10 +27,10 @@ class EstimationList extends Component {
 
 function mapStateToProps(state) {
   console.log(state)
-  const { estimations } = state
-  console.log(estimations.estimations)
-  if(estimations.estimations) return {
-    estimations: estimations.estimations
+  const { estimation } = state
+  console.log(estimation.estimations)
+  if(estimation.estimations) return {
+    estimations: estimation.estimations
   }
 
   return {

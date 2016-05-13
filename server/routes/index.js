@@ -18,5 +18,7 @@ export default (app) => {
   router.route('/api/blocks')
   .post(block.createBlocks)
 
+  router.route('/api/blocks/:estimationId').get(block.getBlocks)
+
   app.use(router)
 }

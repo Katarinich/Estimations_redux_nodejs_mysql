@@ -13,7 +13,7 @@ class EstimationApp extends Component {
       dateUpdated: new Date(),
       totalSum: 0,
       totalHours: 0
-    }, this.props.estimations.estimations)
+    }, this.props.estimation.estimations)
   }
 
   render() {

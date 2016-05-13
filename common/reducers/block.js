@@ -1,27 +1,22 @@
-import { GET_INPUT } from '../constants/actionTypes'
+import * as types from '../constants/actionTypes'
 
 const initialState = {
-  text: 'Development Block',
-  hours: '',
-  rate: '',
-  parentBlockId: null,
-  id: 1,
-  isInput: false,
-  children: [{
-    text: '',
-    hours: '',
-    rate: 0,
-    parentBlockId: 1,
-    isInput: false,
-    id: 2
-  }]
+  isFetching: false
 }
 
 export default function block(state = initialState, action) {
   switch (action.type) {
-    case GET_INPUT:
-      return { ...state, isInput: action.payload }
-
+    case types.GET_BLOCKS_REQUEST:
+      return {
+        ...state,
+        isFetching: true
+      }
+    case types.GET_BLOCKS_SUCCESS:
+      return {
+        isFetching: false,
+        blocks: JSON.parse(action.payload)
+      }
+    case types.GET_BLOCKS_FAILURE:
     default:
       return state;
   }

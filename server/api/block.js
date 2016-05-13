@@ -3,7 +3,6 @@ import pg from 'pg'
 var conString = 'postgres://postgres:admin@localhost/estimations'
 
 export function createBlocks(estimationId, callback) {
-  console.log(estimationId)
   var rootBlock = createRootBlock(estimationId)
 
   var query = 'INSERT INTO block (text, index,' +
@@ -20,7 +19,6 @@ export function createBlocks(estimationId, callback) {
     client.query(query, function(err, result) {
       if(err) {
         console.log(err)
-        done()
         callback(err)
       }
       console.log(result)
@@ -36,6 +34,20 @@ export function createBlocks(estimationId, callback) {
         callback(err)
       })
 
+    })
+  })
+}
+
+export function getBlocks(estimationId, callback) {
+  var query = 'SELECT * FROM block WHERE estimation_id=' + estimationId
+
+  pg.connect(conString, function(err, client) {
+    client.query(query, function(err, result) {
+      if(err) {
+        console.log(err)
+        callback(err)
+      }
+      callback(err, result.rows)
     })
   })
 }

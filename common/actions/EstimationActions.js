@@ -2,10 +2,9 @@ import * as types from '../constants/actionTypes'
 import request from './util/request'
 import {createBlocks} from './BlockActions'
 
-function createEstimationRequest(estimations) {
+function createEstimationRequest() {
   return {
-    type: types.CREATE_ESTIMATION_REQUEST,
-    payload: estimations
+    type: types.CREATE_ESTIMATION_REQUEST
   }
 }
 
