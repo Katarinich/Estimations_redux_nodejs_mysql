@@ -101,7 +101,7 @@ export function signUp(data) {
   return dispatch => {
     dispatch(beginSignUp())
 
-    return makeUserRequest('post', data, '/signup')
+    return makeUserRequest('post', data, '/users')
       .then(response => {
         if (response.status === 200) {
           dispatch(signUpSuccess(response.data.message))
