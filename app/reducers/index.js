@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import auth from 'reducers/auth'
+import estimation from 'reducers/estimation'
 import message from 'reducers/message'
 import { routerReducer as routing } from 'react-router-redux'
 import * as types from 'types'
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   isFetching,
   auth,
   message,
-  routing
+  routing,
+  estimation
 })
 
 export default rootReducer

@@ -3,6 +3,7 @@ import request from 'axios'
 import { push } from 'react-router-redux'
 import jwtDecode from 'jwt-decode'
 import moment from 'moment'
+import { loadInitialState } from 'middlewares/persistenceMiddleware'
 
 import * as types from 'types'
 
@@ -10,17 +11,13 @@ polyfill()
 
 const getMessage = res => res.response && res.response.data && res.response.data.message
 
-function makeUserRequest(method, data, api = '/auth-tokens') {
+function makeUserRequest(method, data, api = '/api/auth-tokens') {
   return request[method](api, data)
 }
 
 export function restoreSignedInUser() {
     return (dispatch, getState) => {
-        dispatch({
-            type: types.RESTORE_SIGNED_IN_USER_REQUEST
-        })
-
-        let auth = getState().auth
+        let auth = loadInitialState().auth
 
         if (!auth.token) {
           return dispatch(logOut())
@@ -37,6 +34,11 @@ export function restoreSignedInUser() {
         if(moment.unix(tokenData.expiryDate).isBefore(moment())) {
           return dispatch(logOut())
         }
+
+        dispatch({
+            type: types.RESTORE_SIGNED_IN_USER,
+            token: auth.token
+        })
     }
 }
 
@@ -82,7 +84,7 @@ export function manualLogin(data) {
   return dispatch => {
     dispatch(beginLogin())
 
-    return makeUserRequest('post', data, '/auth-tokens')
+    return makeUserRequest('post', data, '/api/auth-tokens')
       .then(response => {
         if (response.status === 200) {
           dispatch(loginSuccess(response.data.message, response.data.token))
@@ -101,11 +103,11 @@ export function signUp(data) {
   return dispatch => {
     dispatch(beginSignUp())
 
-    return makeUserRequest('post', data, '/users')
+    return makeUserRequest('post', data, '/api/users')
       .then(response => {
         if (response.status === 200) {
           dispatch(signUpSuccess(response.data.message))
-          dispatch(push('/'))
+          dispatch(push('/estimations'))
         } else {
           dispatch(signUpError('Oops! Something went wrong'))
         }

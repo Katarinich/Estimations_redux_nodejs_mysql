@@ -8,13 +8,16 @@ module.exports = {
         },
         name: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
+          defaultValue: 'New estimation'
         },
         totalSum: {
-          type: DataTypes.INTEGER
+          type: DataTypes.FLOAT,
+          defaultValue: 0
         },
         totalRate: {
-          type: DataTypes.INTEGER
+          type: DataTypes.FLOAT,
+          defaultValue: 0
         },
         dateCreated: {
           type: DataTypes.DATE,
@@ -33,6 +36,7 @@ module.exports = {
         },
         clientId: {
           type: DataTypes.INTEGER,
+          allowNull: true,
           references: {
             model: 'clients',
             key: 'id'

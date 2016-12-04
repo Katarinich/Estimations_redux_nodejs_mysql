@@ -19,6 +19,7 @@ const auth = (state = initialState, action) => {
       }
     case types.LOGIN_SUCCESS_USER:
     case types.SIGNUP_SUCCESS_USER:
+    case types.RESTORE_SIGNED_IN_USER:
       return {
         message: '',
         isWaiting: false,
@@ -32,11 +33,6 @@ const auth = (state = initialState, action) => {
         isWaiting: false,
         authenticated: false,
         token: null
-      }
-    case types.RESTORE_SIGNED_IN_USER_REQUEST:
-      return {
-          ...state,
-          isWaiting: false
       }
     case types.SYNC_AUTH:
       const auth = action.auth || {}

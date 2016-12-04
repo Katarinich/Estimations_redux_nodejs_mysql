@@ -1,36 +1,38 @@
-import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import React from 'react'
+import { Route, IndexRoute } from 'react-router'
 
-import App from 'containers/App';
-import Estimations from 'containers/Estimations';
-import LoginOrRegister from 'containers/LoginOrRegister';
+import App from 'containers/App'
+import Estimations from 'containers/Estimations'
+import LoginOrRegister from 'containers/LoginOrRegister'
 
 export default (store) => {
   const requireAuth = (nextState, replace, callback) => {
-    const { auth: { authenticated }} = store.getState();
+    const { auth: { authenticated }} = store.getState()
     if (!authenticated) {
       replace({
         pathname: '/login',
         state: { nextPathname: nextState.location.pathname }
-      });
+      })
     }
-    callback();
-  };
+    callback()
+  }
 
   const redirectAuth = (nextState, replace, callback) => {
-    const { auth: { authenticated }} = store.getState();
+    const { auth: { authenticated }} = store.getState()
     if (authenticated) {
       replace({
-        pathname: '/'
-      });
+        pathname: '/estimations'
+      })
     }
-    callback();
-  };
+    callback()
+  }
 
   return (
     <Route component={App}>
-      <Route path="/" component={Estimations} onEnter={requireAuth} />
+      <Route path="estimations" onEnter={requireAuth}>
+        <IndexRoute component={Estimations} />
+      </Route>
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
     </Route>
-  );
-};
+  )
+}
