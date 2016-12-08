@@ -24,7 +24,8 @@ const auth = (state = initialState, action) => {
         message: '',
         isWaiting: false,
         authenticated: true,
-        token: action.token
+        token: action.token,
+        userId: action.userId
       }
     case types.LOGIN_ERROR_USER:
     case types.SIGNUP_ERROR_USER:

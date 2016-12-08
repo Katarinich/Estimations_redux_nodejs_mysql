@@ -74,7 +74,7 @@ class LoginOrRegister extends Component {
 
       return (
           <div className={cx('login', {waiting: isWaiting})}>
-              <div className={cx('container')}>
+              <div>
                   {this.renderHeader()}
                   <img className={cx('loading')} src={hourGlassSvg}/>
                   <div className={cx('email-container')}>

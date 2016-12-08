@@ -43,37 +43,39 @@ export function restoreSignedInUser() {
 }
 
 
-export function beginLogin() {
+function beginLogin() {
   return { type: types.MANUAL_LOGIN_USER }
 }
 
-export function loginSuccess(message, token) {
+function loginSuccess(message, token) {
+  const tokenData = jwtDecode(token)
   return {
     type: types.LOGIN_SUCCESS_USER,
     message,
-    token
+    token,
+    userId: tokenData.data
   }
 }
 
-export function loginError(message) {
+function loginError(message) {
   return {
     type: types.LOGIN_ERROR_USER,
     message
   }
 }
 
-export function signUpError(message) {
+function signUpError(message) {
   return {
     type: types.SIGNUP_ERROR_USER,
     message
   }
 }
 
-export function beginSignUp() {
+function beginSignUp() {
   return { type: types.SIGNUP_USER }
 }
 
-export function signUpSuccess(message) {
+function signUpSuccess(message) {
   return {
     type: types.SIGNUP_SUCCESS_USER,
     message
@@ -88,7 +90,7 @@ export function manualLogin(data) {
       .then(response => {
         if (response.status === 200) {
           dispatch(loginSuccess(response.data.message, response.data.token))
-          dispatch(push('/'))
+          dispatch(push('/estimations'))
         } else {
           dispatch(loginError('Oops! Something went wrong!'))
         }

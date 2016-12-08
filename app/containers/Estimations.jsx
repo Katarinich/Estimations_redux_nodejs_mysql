@@ -1,17 +1,27 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import EstimationsTable from 'components/EstimationsTable'
 
-import { getEstimations } from 'actions/estimations'
+import { getEstimations, createEstimation } from 'actions/estimations'
 
 class Estimations extends Component {
   componentDidMount() {
     this.props.getEstimations()
   }
 
+  handleAddEstimation() {
+    this.props.createEstimation()
+  }
+
   render() {
+    const { estimations } = this.props
+
     return (
       <div>
-        Welcome to the Estimations. Stay tuned...
+        <div style={{ marginLeft: '10px' }}>
+          <button className="btn btn-default" onClick={() => this.handleAddEstimation()}>Add</button>
+        </div>
+        <EstimationsTable estimations={estimations} onAddEstimation={ () => this.handleAddEstimation() }/>
       </div>
     );
   }
@@ -27,4 +37,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { getEstimations })(Estimations)
+export default connect(mapStateToProps, { getEstimations, createEstimation })(Estimations)
