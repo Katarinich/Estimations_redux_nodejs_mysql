@@ -1,11 +1,17 @@
 import { polyfill } from 'es6-promise'
-import request from 'axios'
+import axios from 'axios'
 import * as types from 'types'
 
 polyfill()
 
-export function makeEstimationRequest(method, id, data, api = '/api/estimations') {
-  return request[method](api + (id ? ('/' + id) : ''), data)
+export function makeEstimationRequest(method, id, data, token, api = '/api/estimations') {
+  var instance = axios.create({
+    baseURL: '/',
+    timeout: 1000,
+    headers: { 'x-access-token': token }
+  })
+
+  return instance[method](api + (id ? ('/' + id) : ''), data)
 }
 
 function getEstimationsRequest() {
@@ -29,10 +35,12 @@ function getEstimationsFailure(data) {
 }
 
 export function getEstimations() {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(getEstimationsRequest())
 
-    return makeEstimationRequest('get', null, null)
+    const { token } = getState().auth
+
+    return makeEstimationRequest('get', null, null, token)
       .then(response => {
         if (response.status === 200) {
           dispatch(getEstimationsSuccess(response.data))

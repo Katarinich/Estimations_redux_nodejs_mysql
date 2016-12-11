@@ -7,7 +7,7 @@ import { sessionSecret } from '../../../config/secrets'
 export function login(req, res, next) {
   users.findOne({ where: { email: req.body.email } }).then((user) => {
     if (!user) {
-      return res.status(404).json({ message: 'User is not found.' });
+      return res.status(404).json({ message: 'User is not found.' })
     }
 
     return user.comparePassword(req.body.password).then((result) => {

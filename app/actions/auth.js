@@ -31,13 +31,14 @@ export function restoreSignedInUser() {
           return dispatch(logOut())
         }
 
-        if(moment.unix(tokenData.expiryDate).isBefore(moment())) {
+        if(moment.unix(tokenData.exp).isBefore(moment())) {
           return dispatch(logOut())
         }
 
         dispatch({
             type: types.RESTORE_SIGNED_IN_USER,
-            token: auth.token
+            token: auth.token,
+            userId: tokenData.data
         })
     }
 }

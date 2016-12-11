@@ -13,7 +13,6 @@ export function all(req, res) {
 }
 
 export function add(req, res) {
-  console.log(req.body)
   estimation.create(req.body).then(() => {
     res.status(200).send('OK');
   }).catch((err) => {
