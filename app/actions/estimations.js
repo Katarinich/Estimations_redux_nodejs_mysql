@@ -87,7 +87,7 @@ export function createEstimation() {
         return (c === 'x' ? r : (r&0x3|0x8)).toString(16)
     })
 
-    const { userId } = getState().auth
+    const { userId, token } = getState().auth
 
     const data = {
       id,
@@ -96,7 +96,7 @@ export function createEstimation() {
 
     dispatch(createEstimationRequest());
 
-    return makeEstimationRequest('post', null, data)
+    return makeEstimationRequest('post', null, data, token)
       .then(res => {
         if (res.status === 200) {
           dispatch(getEstimations())
