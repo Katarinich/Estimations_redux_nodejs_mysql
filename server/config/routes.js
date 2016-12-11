@@ -9,6 +9,8 @@ const estimationsController = controllers && controllers.estimations
 export default (app) => {
   app.post('/api/auth-tokens', usersController.login)
 
+  app.post('/api/users', usersController.signUp)
+
   app.use(function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
 
@@ -34,8 +36,6 @@ export default (app) => {
       next()
     }
   })
-
-  app.post('/api/users', usersController.signUp)
 
   app.get('/api/users/:userId/estimations', estimationsController.all)
   app.post('/api/users/:userId/estimations', estimationsController.add)

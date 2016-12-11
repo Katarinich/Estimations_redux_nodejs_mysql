@@ -4,7 +4,8 @@ module.exports = {
       'blocks', {
         id: {
           type: DataTypes.INTEGER,
-          primaryKey: true
+          primaryKey: true,
+          autoIncrement: true
         },
         text: {
           type: DataTypes.STRING,

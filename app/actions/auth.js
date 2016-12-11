@@ -125,11 +125,11 @@ export function signUp(data) {
 
 export function logOut() {
   return dispatch => {
-    dispatch(push('/login'))
-
     dispatch({
       type: types.LOG_OUT
     })
+
+    dispatch(push('/login'))
   }
 }
 

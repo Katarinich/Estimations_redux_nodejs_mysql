@@ -42,7 +42,15 @@ export default (sequelize, DataTypes) => {
       }
     }
   }, {
-    timestamps: false
+    timestamps: false,
+    hooks: {
+      afterCreate: function(estimation) {
+        const block = sequelize.models.block;
+        block.create({estimationId: estimation.id, index: 0}).then(result => {
+          block.create({estimationId: estimation.id, index: 0, parentBlockId: result.id})
+        })
+      }
+    }
   })
 
   return estimation

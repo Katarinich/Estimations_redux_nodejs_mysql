@@ -1,9 +1,5 @@
 export default (sequelize, DataTypes) =>
   sequelize.define('block', {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true
-    },
     text: {
       type: DataTypes.STRING,
       allowNull: true
