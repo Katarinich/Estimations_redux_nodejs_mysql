@@ -4,14 +4,14 @@ import * as types from 'types'
 
 polyfill()
 
-export function makeEstimationRequest(method, id, data, token, api = '/api/estimations') {
+export function makeEstimationRequest(method, id, data, userId, token) {
   var instance = axios.create({
     baseURL: '/',
     timeout: 1000,
     headers: { 'x-access-token': token }
   })
 
-  return instance[method](api + (id ? ('/' + id) : ''), data)
+  return instance[method](`/api/users/${userId}/estimations` + (id ? ('/' + id) : ''), data)
 }
 
 function getEstimationsRequest() {
@@ -38,9 +38,9 @@ export function getEstimations() {
   return (dispatch, getState) => {
     dispatch(getEstimationsRequest())
 
-    const { token } = getState().auth
+    const { token, userId } = getState().auth
 
-    return makeEstimationRequest('get', null, null, token)
+    return makeEstimationRequest('get', null, null, userId, token)
       .then(response => {
         if (response.status === 200) {
           dispatch(getEstimationsSuccess(response.data))
@@ -90,13 +90,12 @@ export function createEstimation() {
     const { userId, token } = getState().auth
 
     const data = {
-      id,
-      userId
+      id
     }
 
     dispatch(createEstimationRequest());
 
-    return makeEstimationRequest('post', null, data, token)
+    return makeEstimationRequest('post', null, data, userId, token)
       .then(res => {
         if (res.status === 200) {
           dispatch(getEstimations())

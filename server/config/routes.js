@@ -37,6 +37,6 @@ export default (app) => {
 
   app.post('/api/users', usersController.signUp)
 
-  app.get('/api/estimations', estimationsController.all)
-  app.post('/api/estimations', estimationsController.add)
+  app.get('/api/users/:userId/estimations', estimationsController.all)
+  app.post('/api/users/:userId/estimations', estimationsController.add)
 }

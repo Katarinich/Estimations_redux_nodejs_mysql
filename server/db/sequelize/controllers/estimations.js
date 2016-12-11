@@ -4,7 +4,7 @@ const estimation = Models.estimation
 const sequelize = Models.sequelize
 
 export function all(req, res) {
-  estimation.findAll().then((estimations) => {
+  estimation.findAll({ where: { userId: req.params.userId } }).then((estimations) => {
     res.json(estimations)
   }).catch((err) => {
     console.log(err)
@@ -13,7 +13,7 @@ export function all(req, res) {
 }
 
 export function add(req, res) {
-  estimation.create(req.body).then(() => {
+  estimation.create({id: req.body.id, userId: req.params.userId}).then(() => {
     res.status(200).send('OK');
   }).catch((err) => {
     console.log(err);
