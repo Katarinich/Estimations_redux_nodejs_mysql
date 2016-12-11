@@ -3,6 +3,7 @@ import * as types from 'types'
 const initialState = {
     token: null,
     userId: null,
+    email: null,
     isWaiting: false,
     authenticated: false,
     message: ''
@@ -25,7 +26,8 @@ const auth = (state = initialState, action) => {
         isWaiting: false,
         authenticated: true,
         token: action.token,
-        userId: action.userId
+        userId: action.userId,
+        email: action.email
       }
     case types.LOGIN_ERROR_USER:
     case types.SIGNUP_ERROR_USER:
@@ -33,7 +35,9 @@ const auth = (state = initialState, action) => {
         message: action.message,
         isWaiting: false,
         authenticated: false,
-        token: null
+        token: null,
+        userId: null,
+        email: null
       }
     case types.SYNC_AUTH:
       const auth = action.auth || {}

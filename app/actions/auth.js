@@ -38,7 +38,8 @@ export function restoreSignedInUser() {
         dispatch({
             type: types.RESTORE_SIGNED_IN_USER,
             token: auth.token,
-            userId: tokenData.data
+            userId: tokenData.data.userId,
+            email: tokenData.data.email
         })
     }
 }
@@ -54,7 +55,8 @@ function loginSuccess(message, token) {
     type: types.LOGIN_SUCCESS_USER,
     message,
     token,
-    userId: tokenData.data
+    userId: tokenData.data.userId,
+    email: tokenData.data.email
   }
 }
 
@@ -122,8 +124,12 @@ export function signUp(data) {
 }
 
 export function logOut() {
-  return {
-    type: types.LOG_OUT
+  return dispatch => {
+    dispatch(push('/login'))
+
+    dispatch({
+      type: types.LOG_OUT
+    })
   }
 }
 

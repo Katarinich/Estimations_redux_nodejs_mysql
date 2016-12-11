@@ -14,7 +14,10 @@ export function login(req, res, next) {
       if(result) {
         const token = jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60),
-          data: user.id
+          data: {
+            userId: user.id,
+            email: user.email
+          }
         }, sessionSecret)
 
         return res.status(200).json({
@@ -44,7 +47,10 @@ export function signUp(req, res, next) {
     return user.save().then((result) => {
       const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
-        data: result.id
+        data: {
+          userId: result.id,
+          email: result.email
+        }
       }, sessionSecret)
 
       return res.status(200).json({

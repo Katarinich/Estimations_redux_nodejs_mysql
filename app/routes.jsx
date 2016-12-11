@@ -4,6 +4,7 @@ import { Route, IndexRoute } from 'react-router'
 import App from 'containers/App'
 import Estimations from 'containers/Estimations'
 import LoginOrRegister from 'containers/LoginOrRegister'
+import Main from 'containers/Main'
 
 export default (store) => {
   const requireAuth = (nextState, replace, callback) => {
@@ -29,8 +30,10 @@ export default (store) => {
 
   return (
     <Route component={App}>
-      <Route path="estimations" onEnter={requireAuth}>
-        <IndexRoute component={Estimations} />
+      <Route component={Main}>
+        <Route path="estimations" onEnter={requireAuth}>
+          <IndexRoute component={Estimations} />
+        </Route>
       </Route>
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
     </Route>
