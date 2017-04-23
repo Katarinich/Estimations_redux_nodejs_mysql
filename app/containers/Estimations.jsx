@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import EstimationsTable from 'components/EstimationsTable'
 
-import { getEstimations, createEstimation } from 'actions/estimations'
+import { getEstimations, createEstimation, deleteEstimation } from 'actions/estimations'
 
 class Estimations extends Component {
   componentDidMount() {
@@ -13,15 +13,24 @@ class Estimations extends Component {
     this.props.createEstimation()
   }
 
+  handleDeleteEstimation(estimationId) {
+    // TODO: add confiramtion message
+    this.props.deleteEstimation(estimationId)
+  }
+
   render() {
     const { estimations } = this.props
 
     return (
       <div>
         <div style={{ marginLeft: '10px' }}>
-          <button className="btn btn-default" onClick={() => this.handleAddEstimation()}>Add</button>
+          <button className="btn btn-default" onClick={ () => this.handleAddEstimation() }>Add</button>
         </div>
-        <EstimationsTable estimations={estimations} onAddEstimation={ () => this.handleAddEstimation() }/>
+        <EstimationsTable
+          estimations={estimations}
+          onAddEstimation={ () => this.handleAddEstimation() }
+          onDeleteEstimation={ (id) => this.handleDeleteEstimation(id) }
+        />
       </div>
     );
   }
@@ -33,4 +42,8 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { getEstimations, createEstimation })(Estimations)
+export default connect(mapStateToProps, {
+  getEstimations,
+  createEstimation,
+  deleteEstimation
+})(Estimations)

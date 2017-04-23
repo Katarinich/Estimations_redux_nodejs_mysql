@@ -147,3 +147,41 @@ export function createEstimation() {
       })
   }
 }
+
+function deleteEstimationRequest() {
+  return {
+    type: types.DELETE_ESTIMATION_REQUEST
+  }
+}
+
+function deleteEstimationSuccess() {
+  return {
+    type: types.DELETE_ESTIMATION_SUCCESS
+  }
+}
+
+function deleteEstimationFailure(error) {
+  return {
+    type: types.DELETE_ESTIMATION_FAILURE,
+    error
+  }
+}
+
+export function deleteEstimation(estimationId) {
+  return (dispatch, getState) => {
+    const { userId, token } = getState().auth
+
+    dispatch(deleteEstimationRequest());
+
+    return makeEstimationRequest('delete', estimationId, null, userId, token)
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(getEstimations())
+          return dispatch(deleteEstimationSuccess())
+        }
+      })
+      .catch(() => {
+        return dispatch(deleteEstimationFailure({ id, error: 'Oops! Something went wrong and we couldn\'t delete your ESTIMATION'}))
+      })
+  }
+}

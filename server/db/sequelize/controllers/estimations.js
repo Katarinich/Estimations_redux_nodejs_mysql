@@ -30,8 +30,18 @@ export function add(req, res) {
   });
 }
 
+export function remove(req, res) {
+  estimation.destroy({ where: { id: req.params.estimationId }, individualHooks: true }).then(() => {
+    res.status(200).send('OK');
+  }).catch((err) => {
+    console.log(err);
+    res.status(400).send(err);
+  });
+}
+
 export default {
   all,
   add,
-  get
+  get,
+  remove
 }
