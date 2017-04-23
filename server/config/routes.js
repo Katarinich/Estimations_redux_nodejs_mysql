@@ -38,5 +38,6 @@ export default (app) => {
   })
 
   app.get('/api/users/:userId/estimations', estimationsController.all)
+  app.get('/api/users/:userId/estimations/:estimationId', estimationsController.get)
   app.post('/api/users/:userId/estimations', estimationsController.add)
 }

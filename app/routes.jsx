@@ -3,6 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 
 import App from 'containers/App'
 import Estimations from 'containers/Estimations'
+import Estimation from 'containers/Estimation'
 import LoginOrRegister from 'containers/LoginOrRegister'
 import Main from 'containers/Main'
 
@@ -31,9 +32,8 @@ export default (store) => {
   return (
     <Route component={App}>
       <Route component={Main}>
-        <Route path="estimations" onEnter={requireAuth}>
-          <IndexRoute component={Estimations} />
-        </Route>
+        <Route path="estimations" onEnter={requireAuth} component={Estimations} />
+        <Route path="estimations/:estimationId" component={Estimation} />
       </Route>
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
     </Route>

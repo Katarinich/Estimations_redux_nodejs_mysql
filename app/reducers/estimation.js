@@ -1,12 +1,13 @@
 import * as types from 'types'
 
 const initialState = {
-  estimations: []
+  estimations: [],
+  estimation: {}
 }
 
 const estimation = (state = initialState, action) => {
   switch (action.type) {
-    case types.GET_ESTIMATIONS_SUCCESS:
+    case types.GET_ESTIMATIONS_SUCCESS: {
       if (action.data) {
         return {
           ...state,
@@ -14,8 +15,21 @@ const estimation = (state = initialState, action) => {
         }
       }
       return state
-    default:
+    }
+
+    case types.GET_ESTIMATION_SUCCESS: {
+      if (action.data) {
+        return {
+          ...state,
+          estimation: action.data
+        }
+      }
       return state
+    }
+    
+    default: {
+      return state
+    }
   }
 }
 

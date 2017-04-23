@@ -54,6 +54,46 @@ export function getEstimations() {
   }
 }
 
+function getEstimationRequest() {
+  return {
+    type: types.GET_ESTIMATION_REQUEST
+  }
+}
+
+function getEstimationSuccess(data) {
+  return {
+    type: types.GET_ESTIMATION_SUCCESS,
+    data
+  }
+}
+
+function getEstimationFailure(data) {
+  return {
+    type: types.GET_ESTIMATION_FAILURE,
+    error: data
+  }
+}
+
+export function getEstimation(estimationId) {
+  return (dispatch, getState) => {
+    dispatch(getEstimationRequest())
+
+    const { token, userId } = getState().auth
+
+    return makeEstimationRequest('get', estimationId, null, userId, token)
+      .then(response => {
+        if (response.status === 200) {
+          dispatch(getEstimationSuccess(response.data))
+        } else {
+          dispatch(getEstimationFailure('Oops! Something went wrong!'))
+        }
+      })
+      .catch(err => {
+        dispatch(getEstimationFailure(err))
+      })
+  }
+}
+
 function createEstimationRequest() {
   return {
     type: types.CREATE_ESTIMATION_REQUEST

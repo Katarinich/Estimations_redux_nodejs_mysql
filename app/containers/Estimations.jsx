@@ -27,10 +27,6 @@ class Estimations extends Component {
   }
 }
 
-Estimations.propTypes = {
-  getEstimations: PropTypes.func.isRequired,
-}
-
 function mapStateToProps(state) {
   return {
     estimations: state.estimation.estimations

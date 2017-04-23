@@ -12,6 +12,15 @@ export function all(req, res) {
   })
 }
 
+export function get(req, res) {
+  estimation.findOne({ where: { id: req.params.estimationId } }).then((estimation) => {
+    res.json(estimation)
+  }).catch((err) => {
+    console.log(err)
+    res.status(500).send('Error in first query')
+  })
+}
+
 export function add(req, res) {
   estimation.create({id: req.body.id, userId: req.params.userId}).then(() => {
     res.status(200).send('OK');
@@ -23,5 +32,6 @@ export function add(req, res) {
 
 export default {
   all,
-  add
+  add,
+  get
 }
