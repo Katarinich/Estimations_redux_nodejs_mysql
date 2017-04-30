@@ -39,13 +39,14 @@ const auth = (state = initialState, action) => {
         userId: null,
         email: null
       }
-    case types.SYNC_AUTH:
-      const auth = action.auth || {}
+    case types.SYNC_AUTH: {
+      const authData = action.auth || {}
 
       return {
         ...state,
-        ...auth
+        ...authData
       }
+    }
     case types.LOG_OUT:
       return initialState
     default:
@@ -53,4 +54,4 @@ const auth = (state = initialState, action) => {
   }
 }
 
-export default auth;
+export default auth

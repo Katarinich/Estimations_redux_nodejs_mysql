@@ -27,12 +27,6 @@ export default function render(req, res) {
     } else if (redirect) {
       res.redirect(302, redirect.pathname + redirect.search);
     } else if (props) {
-        const componentHTML = renderToString(
-          <Provider store={store}>
-            <RouterContext {...props} />
-          </Provider>
-        );
-
         const initialState = store.getState();
 
         res.status(200).send(`
@@ -45,7 +39,7 @@ export default function render(req, res) {
               <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
             </head>
             <body>
-              <div id="app">${componentHTML}</div>
+              <div id="app"></div>
               <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};</script>
               <script type="text/javascript" charset="utf-8" src="/assets/app.js"></script>
             </body>

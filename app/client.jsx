@@ -15,11 +15,11 @@ const store = configureStore(initialState, browserHistory)
 const history = syncHistoryWithStore(browserHistory, store)
 const routes = createRoutes(store)
 
+store.dispatch(restoreSignedInUser())
+
 render(
   <Provider store={store}>
     <Router history={history}>
       {routes}
     </Router>
   </Provider>, document.getElementById('app'))
-
-  store.dispatch(restoreSignedInUser())

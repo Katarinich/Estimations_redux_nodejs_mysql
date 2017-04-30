@@ -5,7 +5,7 @@ import * as types from 'types'
 polyfill()
 
 export function makeEstimationRequest(method, id, data, userId, token) {
-  var instance = axios.create({
+  const instance = axios.create({
     baseURL: '/',
     timeout: 1000,
     headers: { 'x-access-token': token }
@@ -43,13 +43,13 @@ export function getEstimations() {
     return makeEstimationRequest('get', null, null, userId, token)
       .then(response => {
         if (response.status === 200) {
-          dispatch(getEstimationsSuccess(response.data))
-        } else {
-          dispatch(getEstimationsFailure('Oops! Something went wrong!'))
+          return dispatch(getEstimationsSuccess(response.data))
         }
+
+        return dispatch(getEstimationsFailure('Oops! Something went wrong!'))
       })
       .catch(err => {
-        dispatch(getEstimationsFailure(err))
+        return dispatch(getEstimationsFailure(err))
       })
   }
 }
@@ -83,13 +83,13 @@ export function getEstimation(estimationId) {
     return makeEstimationRequest('get', estimationId, null, userId, token)
       .then(response => {
         if (response.status === 200) {
-          dispatch(getEstimationSuccess(response.data))
-        } else {
-          dispatch(getEstimationFailure('Oops! Something went wrong!'))
+          return dispatch(getEstimationSuccess(response.data))
         }
+
+        return dispatch(getEstimationFailure('Oops! Something went wrong!'))
       })
       .catch(err => {
-        dispatch(getEstimationFailure(err))
+        return dispatch(getEstimationFailure(err))
       })
   }
 }
@@ -115,16 +115,16 @@ function createEstimationFailure(error) {
 
 export function createEstimation() {
   return (dispatch, getState) => {
-    var d = new Date().getTime()
+    let d = new Date().getTime()
 
-    if(window.performance && typeof window.performance.now === 'function') {
+    if (window.performance && typeof window.performance.now === 'function') {
         d += performance.now()
     }
 
-    const id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d/16)
-        return (c === 'x' ? r : (r&0x3|0x8)).toString(16)
+    const id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = (d + (Math.random() * 16)) % 16 | 0
+        d = Math.floor(d / 16)
+        return (c === 'x' ? r : ((r & 0x3) | 0x8)).toString(16)
     })
 
     const { userId, token } = getState().auth
@@ -136,11 +136,9 @@ export function createEstimation() {
     dispatch(createEstimationRequest());
 
     return makeEstimationRequest('post', null, data, userId, token)
-      .then(res => {
-        if (res.status === 200) {
-          dispatch(getEstimations())
-          return dispatch(createEstimationSuccess())
-        }
+      .then(() => {
+        dispatch(getEstimations())
+        return dispatch(createEstimationSuccess())
       })
       .catch(() => {
         return dispatch(createEstimationFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your ESTIMATION'}))
@@ -174,14 +172,12 @@ export function deleteEstimation(estimationId) {
     dispatch(deleteEstimationRequest());
 
     return makeEstimationRequest('delete', estimationId, null, userId, token)
-      .then(res => {
-        if (res.status === 200) {
-          dispatch(getEstimations())
-          return dispatch(deleteEstimationSuccess())
-        }
+      .then(() => {
+        dispatch(getEstimations())
+        return dispatch(deleteEstimationSuccess())
       })
       .catch(() => {
-        return dispatch(deleteEstimationFailure({ id, error: 'Oops! Something went wrong and we couldn\'t delete your ESTIMATION'}))
+        return dispatch(deleteEstimationFailure({ estimationId, error: 'Oops! Something went wrong and we couldn\'t delete your ESTIMATION'}))
       })
   }
 }

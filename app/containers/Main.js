@@ -8,7 +8,7 @@ import { logOut } from 'actions/auth'
 class Main extends Component {
   render() {
     return (
-      <div>
+      <div className="container">
         <Breadcrumbs email={this.props.auth.email} onLogOutClick={this.props.logOut} />
         {this.props.children}
       </div>

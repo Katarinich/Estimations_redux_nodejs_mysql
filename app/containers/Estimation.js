@@ -15,7 +15,7 @@ class Estimation extends Component {
 
     return (
       <div>
-        <EstimationEditData extimation={estimation} />
+        <EstimationEditData estimation={estimation} />
       </div>
     );
   }

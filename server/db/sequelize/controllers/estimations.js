@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import Models from '../models'
 const estimation = Models.estimation
+const block = Models.block
 const sequelize = Models.sequelize
 
 export function all(req, res) {
@@ -13,8 +14,10 @@ export function all(req, res) {
 }
 
 export function get(req, res) {
-  estimation.findOne({ where: { id: req.params.estimationId } }).then((estimation) => {
-    res.json(estimation)
+  estimation.findOne({ where: { id: req.params.estimationId }, raw: true }).then((estimation) => {
+    return block.findAll({ where: { estimationId: estimation.id }, raw: true }).then((blocks) => {
+      res.json({ ...estimation, blocks })
+    })
   }).catch((err) => {
     console.log(err)
     res.status(500).send('Error in first query')

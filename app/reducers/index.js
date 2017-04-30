@@ -2,10 +2,11 @@ import { combineReducers } from 'redux'
 import auth from 'reducers/auth'
 import estimation from 'reducers/estimation'
 import message from 'reducers/message'
+import editData from 'reducers/editData'
 import { routerReducer as routing } from 'react-router-redux'
 import * as types from 'types'
 
-const isFetching = ( state = false, action ) => {
+const isFetching = (state = false, action) => {
   switch (action.type) {
     case types.CREATE_REQUEST:
       return true
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   auth,
   message,
   routing,
-  estimation
+  estimation,
+  editData
 })
 
 export default rootReducer
