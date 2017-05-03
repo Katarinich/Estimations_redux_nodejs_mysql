@@ -5,6 +5,7 @@ import { sessionSecret } from './secrets'
 
 const usersController = controllers && controllers.users
 const estimationsController = controllers && controllers.estimations
+const blocksController = controllers && controllers.blocks
 
 export default (app) => {
   app.post('/api/auth-tokens', usersController.login)
@@ -41,4 +42,5 @@ export default (app) => {
   app.post('/api/users/:userId/estimations', estimationsController.add)
   app.get('/api/users/:userId/estimations/:estimationId', estimationsController.get)
   app.delete('/api/users/:userId/estimations/:estimationId', estimationsController.remove)
+  app.put('/api/users/:userId/estimations/:estimationId/blocks/:blockId', blocksController.update)
 }

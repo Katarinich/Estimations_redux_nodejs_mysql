@@ -26,7 +26,21 @@ const estimation = (state = initialState, action) => {
       }
       return state
     }
-    
+
+    case types.UPDATE_BLOCK_SUCCESS: {
+      const blockIndex = state.estimation.blocks.findIndex(b => b.id === action.payload.id)
+
+      const newBlocks = [...state.estimation.blocks]
+      newBlocks[blockIndex] = { ...action.payload }
+
+      return {
+        estimation: {
+          ...state.estimation,
+          blocks: newBlocks
+        }
+      }
+    }
+
     default: {
       return state
     }

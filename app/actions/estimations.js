@@ -14,6 +14,16 @@ export function makeEstimationRequest(method, id, data, userId, token) {
   return instance[method](`/api/users/${userId}/estimations` + (id ? ('/' + id) : ''), data)
 }
 
+export function makeEstimationBlockRequest(method, id, data, estimationId, userId, token) {
+  const instance = axios.create({
+    baseURL: '/',
+    timeout: 1000,
+    headers: { 'x-access-token': token }
+  })
+
+  return instance[method](`/api/users/${userId}/estimations/${estimationId}/blocks` + (id ? ('/' + id) : ''), data)
+}
+
 function getEstimationsRequest() {
   return {
     type: types.GET_ESTIMATIONS_REQUEST
@@ -133,7 +143,7 @@ export function createEstimation() {
       id
     }
 
-    dispatch(createEstimationRequest());
+    dispatch(createEstimationRequest())
 
     return makeEstimationRequest('post', null, data, userId, token)
       .then(() => {
@@ -169,7 +179,7 @@ export function deleteEstimation(estimationId) {
   return (dispatch, getState) => {
     const { userId, token } = getState().auth
 
-    dispatch(deleteEstimationRequest());
+    dispatch(deleteEstimationRequest())
 
     return makeEstimationRequest('delete', estimationId, null, userId, token)
       .then(() => {
@@ -178,6 +188,42 @@ export function deleteEstimation(estimationId) {
       })
       .catch(() => {
         return dispatch(deleteEstimationFailure({ estimationId, error: 'Oops! Something went wrong and we couldn\'t delete your ESTIMATION'}))
+      })
+  }
+}
+
+function updateEstimationBlockRequest() {
+  return {
+    type: types.UPDATE_BLOCK_REQUEST
+  }
+}
+
+function updateEstimationBlockSuccess(blockData) {
+  return {
+    type: types.UPDATE_BLOCK_SUCCESS,
+    payload: blockData
+  }
+}
+
+function updateEstimationBlockFailure(error) {
+  return {
+    type: types.UPDATE_BLOCK_FAILURE,
+    error
+  }
+}
+
+export function updateEstimationBlock(blockId, estimationId, blockData) {
+  return (dispatch, getState) => {
+    const { userId, token } = getState().auth
+
+    dispatch(updateEstimationBlockRequest())
+
+    return makeEstimationBlockRequest('put', blockId, blockData, estimationId, userId, token)
+      .then(() => {
+        return dispatch(updateEstimationBlockSuccess(blockData))
+      })
+      .catch(() => {
+        return dispatch(updateEstimationBlockFailure({ blockId, error: 'Oops! Something went wrong and we couldn\'t update your BLOCK'}))
       })
   }
 }
