@@ -4,24 +4,14 @@ import * as types from 'types'
 
 polyfill()
 
-export function makeEstimationRequest(method, id, data, userId, token) {
+export function makeEstimationRequest(method, url, data, token) {
   const instance = axios.create({
     baseURL: '/',
     timeout: 1000,
     headers: { 'x-access-token': token }
   })
 
-  return instance[method](`/api/users/${userId}/estimations` + (id ? ('/' + id) : ''), data)
-}
-
-export function makeEstimationBlockRequest(method, id, data, estimationId, userId, token) {
-  const instance = axios.create({
-    baseURL: '/',
-    timeout: 1000,
-    headers: { 'x-access-token': token }
-  })
-
-  return instance[method](`/api/users/${userId}/estimations/${estimationId}/blocks` + (id ? ('/' + id) : ''), data)
+  return instance[method](url, data)
 }
 
 function getEstimationsRequest() {
@@ -50,7 +40,7 @@ export function getEstimations() {
 
     const { token, userId } = getState().auth
 
-    return makeEstimationRequest('get', null, null, userId, token)
+    return makeEstimationRequest('get', `/api/users/${userId}/estimations`, null, token)
       .then(response => {
         if (response.status === 200) {
           return dispatch(getEstimationsSuccess(response.data))
@@ -88,9 +78,9 @@ export function getEstimation(estimationId) {
   return (dispatch, getState) => {
     dispatch(getEstimationRequest())
 
-    const { token, userId } = getState().auth
+    const { token } = getState().auth
 
-    return makeEstimationRequest('get', estimationId, null, userId, token)
+    return makeEstimationRequest('get', `/api/estimations/${estimationId}`, null, token)
       .then(response => {
         if (response.status === 200) {
           return dispatch(getEstimationSuccess(response.data))
@@ -145,7 +135,7 @@ export function createEstimation() {
 
     dispatch(createEstimationRequest())
 
-    return makeEstimationRequest('post', null, data, userId, token)
+    return makeEstimationRequest('post', `/api/users/${userId}/estimations`, data, token)
       .then(() => {
         dispatch(getEstimations())
         return dispatch(createEstimationSuccess())
@@ -177,11 +167,11 @@ function deleteEstimationFailure(error) {
 
 export function deleteEstimation(estimationId) {
   return (dispatch, getState) => {
-    const { userId, token } = getState().auth
+    const { token } = getState().auth
 
     dispatch(deleteEstimationRequest())
 
-    return makeEstimationRequest('delete', estimationId, null, userId, token)
+    return makeEstimationRequest('delete', `/api/estimations/${estimationId}`, null, token)
       .then(() => {
         dispatch(getEstimations())
         return dispatch(deleteEstimationSuccess())
@@ -214,16 +204,56 @@ function updateEstimationBlockFailure(error) {
 
 export function updateEstimationBlock(blockId, estimationId, blockData) {
   return (dispatch, getState) => {
-    const { userId, token } = getState().auth
+    const { token } = getState().auth
 
     dispatch(updateEstimationBlockRequest())
 
-    return makeEstimationBlockRequest('put', blockId, blockData, estimationId, userId, token)
+    return makeEstimationRequest('put', `/api/estimations/${estimationId}/blocks/${blockId}`, blockData, token)
       .then(() => {
         return dispatch(updateEstimationBlockSuccess(blockData))
       })
       .catch(() => {
         return dispatch(updateEstimationBlockFailure({ blockId, error: 'Oops! Something went wrong and we couldn\'t update your BLOCK'}))
+      })
+  }
+}
+
+function addEstimationBlockRequest() {
+  return {
+    type: types.ADD_BLOCK_REQUEST
+  }
+}
+
+function addEstimationBlockSuccess(blockId, blockData) {
+  return {
+    type: types.ADD_BLOCK_SUCCESS,
+    payload: {
+      id: blockId,
+      ...blockData
+    }
+  }
+}
+
+function addEstimationBlockFailure(error) {
+  return {
+    type: types.ADD_BLOCK_FAILURE,
+    error
+  }
+}
+
+export function addEstimationBlock(estimationId, blockData) {
+  return (dispatch, getState) => {
+    const { token } = getState().auth
+
+    dispatch(addEstimationBlockRequest())
+
+    return makeEstimationRequest('post', `/api/estimations/${estimationId}/blocks`, blockData, token)
+      .then((result) => {
+        dispatch(addEstimationBlockSuccess(result.data, blockData))
+        return result.data
+      })
+      .catch(() => {
+        return dispatch(addEstimationBlockFailure({ error: 'Oops! Something went wrong and we couldn\'t add your BLOCK'}))
       })
   }
 }

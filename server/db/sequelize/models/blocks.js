@@ -32,6 +32,7 @@ export default (sequelize, DataTypes) =>
     },
     estimationId: {
       type: DataTypes.STRING,
+      allowNull: false,
       references: {
         model: 'estimations',
         key: 'id'

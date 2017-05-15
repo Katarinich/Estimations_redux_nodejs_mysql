@@ -1,11 +1,8 @@
-import { connect, controllers, passport } from '../sequelize'
-import session from './session'
+import { connect, controllers } from '../sequelize'
 
-export { connect, controllers, passport, session }
+export { connect, controllers }
 
 export default {
   connect,
-  controllers,
-  passport,
-  session
+  controllers
 }

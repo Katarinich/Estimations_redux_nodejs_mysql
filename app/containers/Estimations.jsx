@@ -24,12 +24,12 @@ class Estimations extends Component {
     return (
       <div>
         <div style={{ marginLeft: '10px' }}>
-          <button className="btn btn-default" onClick={ () => this.handleAddEstimation() }>Add</button>
+          <button className="btn btn-default" onClick={() => this.handleAddEstimation()}>Add</button>
         </div>
         <EstimationsTable
           estimations={estimations}
-          onAddEstimation={ () => this.handleAddEstimation() }
-          onDeleteEstimation={ (id) => this.handleDeleteEstimation(id) }
+          onAddEstimation={() => this.handleAddEstimation()}
+          onDeleteEstimation={(id) => this.handleDeleteEstimation(id)}
         />
       </div>
     );

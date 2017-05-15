@@ -15,9 +15,19 @@ function makeUserRequest(method, data, api = '/api/auth-tokens') {
   return request[method](api, data)
 }
 
+export function logOut() {
+  return dispatch => {
+    dispatch({
+      type: types.LOG_OUT
+    })
+
+    dispatch(push('/login'))
+  }
+}
+
 export function restoreSignedInUser() {
-    return (dispatch, getState) => {
-        let auth = loadInitialState().auth
+    return (dispatch) => {
+        const auth = loadInitialState().auth
 
         if (!auth.token) {
           return dispatch(logOut())
@@ -31,7 +41,7 @@ export function restoreSignedInUser() {
           return dispatch(logOut())
         }
 
-        if(moment.unix(tokenData.exp).isBefore(moment())) {
+        if (moment.unix(tokenData.exp).isBefore(moment())) {
           return dispatch(logOut())
         }
 
@@ -43,7 +53,6 @@ export function restoreSignedInUser() {
         })
     }
 }
-
 
 function beginLogin() {
   return { type: types.MANUAL_LOGIN_USER }
@@ -100,8 +109,8 @@ export function manualLogin(data) {
       })
       .catch(err => {
         dispatch(loginError(getMessage(err)))
-      });
-  };
+      })
+  }
 }
 
 export function signUp(data) {
@@ -123,15 +132,6 @@ export function signUp(data) {
   }
 }
 
-export function logOut() {
-  return dispatch => {
-    dispatch({
-      type: types.LOG_OUT
-    })
-
-    dispatch(push('/login'))
-  }
-}
 
 export function syncAuth(auth) {
   return {

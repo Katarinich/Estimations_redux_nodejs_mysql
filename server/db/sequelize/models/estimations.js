@@ -44,15 +44,15 @@ export default (sequelize, DataTypes) => {
   }, {
     timestamps: false,
     hooks: {
-      afterCreate: function(estimation) {
+      afterCreate(createdEstimation) {
         const block = sequelize.models.block
-        block.create({estimationId: estimation.id, index: 0}).then(result => {
-          block.create({estimationId: estimation.id, index: 0, parentBlockId: result.id})
+        block.create({estimationId: createdEstimation.id, index: 0}).then(result => {
+          block.create({estimationId: createdEstimation.id, index: 0, parentBlockId: result.id})
         })
       },
-      beforeDestroy: function(estimation) {
+      beforeDestroy(estimationToDelete) {
         const block = sequelize.models.block
-        block.destroy({ where: { estimationId: estimation.id } })
+        block.destroy({ where: { estimationId: estimationToDelete.id } })
       }
     }
   })

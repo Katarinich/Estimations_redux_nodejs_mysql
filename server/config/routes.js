@@ -12,20 +12,20 @@ export default (app) => {
 
   app.post('/api/users', usersController.signUp)
 
-  app.use(function(req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token']
+  app.use((req, res, next) => {
+    const token = req.body.token || req.query.token || req.headers['x-access-token']
 
     const isApiRoute = req.originalUrl.indexOf('api') !== -1
 
     if (isApiRoute) {
       if (token && isApiRoute) {
-        jwt.verify(token, sessionSecret, function(err, decoded) {
+        jwt.verify(token, sessionSecret, (err, decoded) => {
           if (err) {
             return res.json({ success: false, message: 'Failed to authenticate token.' })
-          } else {
-            req.decoded = decoded
-            next()
           }
+
+          req.decoded = decoded
+          next()
         })
       } else {
         return res.status(403).send({
@@ -40,7 +40,8 @@ export default (app) => {
 
   app.get('/api/users/:userId/estimations', estimationsController.all)
   app.post('/api/users/:userId/estimations', estimationsController.add)
-  app.get('/api/users/:userId/estimations/:estimationId', estimationsController.get)
-  app.delete('/api/users/:userId/estimations/:estimationId', estimationsController.remove)
-  app.put('/api/users/:userId/estimations/:estimationId/blocks/:blockId', blocksController.update)
+  app.get('/api/estimations/:estimationId', estimationsController.get)
+  app.delete('/api/estimations/:estimationId', estimationsController.remove)
+  app.put('/api/estimations/:estimationId/blocks/:blockId', blocksController.update)
+  app.post('/api/estimations/:estimationId/blocks', blocksController.add)
 }

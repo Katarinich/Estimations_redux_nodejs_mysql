@@ -10,7 +10,9 @@ export default class EstimationEditBlocks extends Component {
       return null
     }
 
-    const childBlocks = blocks.filter(b => b.parentBlockId === parentBlockId)
+    const childBlocks = blocks.filter(b => b.parentBlockId === parentBlockId).sort((a, b) => {
+      return a.index - b.index
+    })
 
     return childBlocks.map((block) => {
       return (

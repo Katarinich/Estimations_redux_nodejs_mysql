@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
 
 import Models from '../models'
-const users = Models.users
 import { sessionSecret } from '../../../config/secrets'
+
+const users = Models.users
 
 export function login(req, res, next) {
   users.findOne({ where: { email: req.body.email } }).then((user) => {
@@ -58,8 +59,8 @@ export function signUp(req, res, next) {
         message: 'You have been successfully logged in.'
       })
     }).catch((err) => {
-      console.log(err);
-      res.status(400).send(err);
+      console.log(err)
+      res.status(400).send(err)
     })
   }).catch((err) =>
     next(err)

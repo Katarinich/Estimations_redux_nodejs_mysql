@@ -1,11 +1,13 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import expressValidator from 'express-validator'
 import path from 'path'
 import flash from 'express-flash'
 import methodOverride from 'method-override'
-import { DB_TYPE, ENV } from './appConfig'
 import gzip from 'compression'
 import helmet from 'helmet'
+
+import { DB_TYPE, ENV } from './appConfig'
 
 export default (app) => {
   app.set('port', (process.env.PORT || 3000))
@@ -17,6 +19,7 @@ export default (app) => {
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(expressValidator())
   app.use(methodOverride())
 
   app.use(express.static(path.join(__dirname, '../..', 'public')))
@@ -25,7 +28,7 @@ export default (app) => {
 
   console.log('--------------------------')
   console.log('===> 😊  Starting Server . . .')
-  console.log(`===>  Environment: ${ENV}`);
+  console.log(`===>  Environment: ${ENV}`)
   console.log(`===>  Listening on port: ${app.get('port')}`)
   console.log(`===>  Using DB TYPE: ${DB_TYPE}`)
   if (ENV === 'production') {

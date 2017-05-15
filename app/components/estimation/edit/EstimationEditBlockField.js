@@ -32,7 +32,7 @@ export default class EstimationEditBlockField extends Component {
     }
 
     return (
-      <div onClick={this.handleClick}>
+      <div onClick={this.handleClick} style={{ minHeight: '20px' }}>
         {text}
       </div>
     )

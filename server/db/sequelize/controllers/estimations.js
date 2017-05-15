@@ -1,8 +1,7 @@
-import _ from 'lodash'
 import Models from '../models'
+
 const estimation = Models.estimation
 const block = Models.block
-const sequelize = Models.sequelize
 
 export function all(req, res) {
   estimation.findAll({ where: { userId: req.params.userId } }).then((estimations) => {
@@ -14,9 +13,9 @@ export function all(req, res) {
 }
 
 export function get(req, res) {
-  estimation.findOne({ where: { id: req.params.estimationId }, raw: true }).then((estimation) => {
-    return block.findAll({ where: { estimationId: estimation.id }, raw: true }).then((blocks) => {
-      res.json({ ...estimation, blocks })
+  estimation.findOne({ where: { id: req.params.estimationId }, raw: true }).then((findingEstimation) => {
+    return block.findAll({ where: { estimationId: findingEstimation.id }, raw: true }).then((blocks) => {
+      res.json({ ...findingEstimation, blocks })
     })
   }).catch((err) => {
     console.log(err)
@@ -26,20 +25,20 @@ export function get(req, res) {
 
 export function add(req, res) {
   estimation.create({id: req.body.id, userId: req.params.userId}).then(() => {
-    res.status(200).send('OK');
+    res.status(200).send('OK')
   }).catch((err) => {
-    console.log(err);
-    res.status(400).send(err);
-  });
+    console.log(err)
+    res.status(400).send(err)
+  })
 }
 
 export function remove(req, res) {
   estimation.destroy({ where: { id: req.params.estimationId }, individualHooks: true }).then(() => {
-    res.status(200).send('OK');
+    res.status(200).send('OK')
   }).catch((err) => {
-    console.log(err);
-    res.status(400).send(err);
-  });
+    console.log(err)
+    res.status(400).send(err)
+  })
 }
 
 export default {

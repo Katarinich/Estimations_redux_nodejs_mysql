@@ -18,11 +18,11 @@ export default class EstimationsTable extends Component {
     return <Link to={`/estimations/${row.id}`}>{row.name}</Link>
   }
 
-  dateFormatter(cell, row) {
-    return moment(cell).format('LLL');
+  dateFormatter(cell) {
+    return moment(cell).format('LLL')
   }
 
-  deleteButtonFormatter(cell, row) {
+  deleteButtonFormatter(cell) {
     return (
       <button
         type="button"
@@ -40,13 +40,13 @@ export default class EstimationsTable extends Component {
 
     return (
       <BootstrapTable data={estimations} striped hover>
-        <TableHeaderColumn isKey dataField='id' hidden></TableHeaderColumn>
-        <TableHeaderColumn dataField='name' dataFormat={this.nameFormatter}>Name</TableHeaderColumn>
-        <TableHeaderColumn dataField='totalSum'>Total Sum</TableHeaderColumn>
-        <TableHeaderColumn dataField='totalRate'>Total Rate</TableHeaderColumn>
-        <TableHeaderColumn dataField='dateCreated' dataFormat={this.dateFormatter}>Date Created</TableHeaderColumn>
-        <TableHeaderColumn dataField='dateModified' dataFormat={this.dateFormatter}>Date Modified</TableHeaderColumn>
-        <TableHeaderColumn dataField='id' dataFormat={this.deleteButtonFormatter} width='28'></TableHeaderColumn>
+        <TableHeaderColumn isKey dataField="id" hidden />
+        <TableHeaderColumn dataField="name" dataFormat={this.nameFormatter}>Name</TableHeaderColumn>
+        <TableHeaderColumn dataField="totalSum">Total Sum</TableHeaderColumn>
+        <TableHeaderColumn dataField="totalRate">Total Rate</TableHeaderColumn>
+        <TableHeaderColumn dataField="dateCreated" dataFormat={this.dateFormatter}>Date Created</TableHeaderColumn>
+        <TableHeaderColumn dataField="dateModified" dataFormat={this.dateFormatter}>Date Modified</TableHeaderColumn>
+        <TableHeaderColumn dataField="id" dataFormat={this.deleteButtonFormatter} width="28" />
       </BootstrapTable>
     )
   }

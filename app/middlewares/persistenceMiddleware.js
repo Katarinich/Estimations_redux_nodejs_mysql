@@ -1,42 +1,53 @@
 import { syncAuth } from 'actions/auth'
 
-const versionKey = "version"
-const authKey = "auth"
+const authKey = 'auth'
 
 const descriptors = [
   {
-    stateKey: "auth",
+    stateKey: 'auth',
     storageKey: authKey,
     syncActionCreator: syncAuth
   }
 ]
 
-export function loadInitialState() {
-  const savedAuth = load(authKey)
+function loadRaw(key) {
+  return localStorage.getItem(key)
+}
 
-  const auth = savedAuth || {}
+function saveRaw(key, value) {
+  localStorage.setItem(key, value)
+}
 
-  var initialState = {
-    auth: auth
+function deserialize(serializedValue) {
+  return JSON.parse(serializedValue)
+}
+
+function serialize(value) {
+  return JSON.stringify(value)
+}
+
+function load(key) {
+  const serializedValue = loadRaw(key)
+  return deserialize(serializedValue)
+}
+
+function dataChanged(key, storageEvent) {
+  if (storageEvent.key !== key) {
+    return false
   }
 
-  return initialState
+  return storageEvent.oldValue !== storageEvent.newValue
 }
 
-export const persistChanges = store => next => action => {
-  var prevState = store.getState()
+function syncIfStorageEntryChanged(key, storageEvent, store, syncActionCreator) {
+  if (!dataChanged(key, storageEvent)) {
+    return false
+  }
 
-  var result = next(action)
+  const savedData = load(key)
+  store.dispatch(syncActionCreator(savedData))
 
-  var nextState = store.getState()
-
-  flushStateChanges(prevState, nextState)
-
-  return result
-}
-
-export function bindStoreToStorageUpdates(store) {
-  //window.addEventListener('storage', handleStorageUpdate(store))
+  return true
 }
 
 function flushStateChanges(prevState = {}, nextState = {}) {
@@ -55,6 +66,34 @@ function flushStateChanges(prevState = {}, nextState = {}) {
   })
 }
 
+export function loadInitialState() {
+  const savedAuth = load(authKey)
+
+  const auth = savedAuth || {}
+
+  const initialState = {
+    auth
+  }
+
+  return initialState
+}
+
+export const persistChanges = store => next => action => {
+  const prevState = store.getState()
+
+  const result = next(action)
+
+  const nextState = store.getState()
+
+  flushStateChanges(prevState, nextState)
+
+  return result
+}
+
+export function bindStoreToStorageUpdates(store) {
+  //window.addEventListener('storage', handleStorageUpdate(store))
+}
+
 function handleStorageUpdate(store) {
   return storageEvent => {
     descriptors.forEach(descriptor => {
@@ -65,47 +104,4 @@ function handleStorageUpdate(store) {
   }
 }
 
-function syncIfStorageEntryChanged(key, storageEvent, store, syncActionCreator) {
-  if (!dataChanged(key, storageEvent)) {
-    return false
-  }
 
-  var savedData = load(key)
-  store.dispatch(syncActionCreator(savedData))
-
-  return true
-}
-
-function dataChanged(key, storageEvent) {
-  if (storageEvent.key !== key) {
-    return false
-  }
-
-  return storageEvent.oldValue !== storageEvent.newValue
-}
-
-function serialize(value) {
-  return JSON.stringify(value)
-}
-
-function deserialize(serializedValue) {
-  return JSON.parse(serializedValue)
-}
-
-function save(key, value) {
-  var serializedValue = serialize(value)
-  saveRaw(key, serializedValue)
-}
-
-function saveRaw(key, value) {
-  localStorage.setItem(key, value)
-}
-
-function load(key) {
-  var serializedValue = loadRaw(key)
-  return deserialize(serializedValue)
-}
-
-function loadRaw(key) {
-  return localStorage.getItem(key)
-}

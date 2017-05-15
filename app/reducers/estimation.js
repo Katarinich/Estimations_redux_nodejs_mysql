@@ -41,6 +41,25 @@ const estimation = (state = initialState, action) => {
       }
     }
 
+    case types.ADD_BLOCK_SUCCESS: {
+      const newBlocks = state.estimation.blocks.map(block => {
+        if (action.payload.index >= block.index) {
+          return { ...block, index: block.index + 1 }
+        }
+
+        return { ...block }
+      })
+      
+      newBlocks.push({ ...action.payload })
+
+      return {
+        estimation: {
+          ...state.estimation,
+          blocks: newBlocks
+        }
+      }
+    }
+
     default: {
       return state
     }

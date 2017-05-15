@@ -5,7 +5,7 @@ import EstimationEditBlocks from 'components/estimation/edit/EstimationEditBlock
 import EstimationEditBlockField from 'components/estimation/edit/EstimationEditBlockField'
 
 import { setEditData, resetEditData } from 'actions/editData'
-import { updateEstimationBlock } from 'actions/estimations'
+import { updateEstimationBlock, addEstimationBlock } from 'actions/estimations'
 
 class EstimationEditBlock extends Component {
   constructor(props) {
@@ -31,8 +31,31 @@ class EstimationEditBlock extends Component {
     return parseInt(block.hours, 10) * block.rate
   }
 
+  checkIfCurrentBlockParent() {
+    const { blocks, block } = this.props
+
+    const childBlocks = blocks.filter(b => b.parentBlockId === block.id)
+
+    return childBlocks.length !== 0
+  }
+
   handleAddNewBlock() {
-    return
+    const { block } = this.props
+
+    const isParent = this.checkIfCurrentBlockParent()
+
+    const newBlockData = {
+      parentBlockId: isParent ? block.id : block.parentBlockId,
+      index: isParent ? 1 : block.index + 1,
+      estimationId: block.estimationId,
+      text: '',
+      hours: '0h',
+      rate: 0
+    }
+
+    this.props.addEstimationBlock(block.estimationId, newBlockData).then(result => {
+      this.props.setEditData(result, 'text')
+    })
   }
 
   handleClick(fieldType) {
@@ -55,15 +78,27 @@ class EstimationEditBlock extends Component {
   }
 
   handleKeyDown(e) {
+    const { block } = this.props
+    const { text, hours, rate } = this.state
+    
     if (e.keyCode !== 13) {
       return
     }
 
+    this.props.updateEstimationBlock(block.id, block.estimationId, { ...block, text, hours, rate })
+
     const { editBlock, editField } = this.props
+
+    const isParent = this.checkIfCurrentBlockParent()
 
     let newEditField = null
     switch (editField) {
       case 'text': {
+        if (isParent) {
+          this.handleAddNewBlock()
+          return
+        }
+
         newEditField = 'hours'
         break
       }
@@ -90,8 +125,7 @@ class EstimationEditBlock extends Component {
     const { block, blocks, nestingLevel, editBlock, editField } = this.props
     const { text, hours, rate } = this.state
 
-    const childBlocks = blocks.filter(b => b.parentBlockId === block.id)
-    const isParent = childBlocks.length !== 0
+    const isParent = this.checkIfCurrentBlockParent()
 
     const isEdit = editBlock === block.id
 
@@ -108,6 +142,7 @@ class EstimationEditBlock extends Component {
                 onClick={this.handleClick}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
               />
             </div>
           </div>
@@ -179,4 +214,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { setEditData, resetEditData, updateEstimationBlock })(EstimationEditBlock)
+export default connect(mapStateToProps, { setEditData, resetEditData, updateEstimationBlock, addEstimationBlock })(EstimationEditBlock)
